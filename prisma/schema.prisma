@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,8 +11,8 @@ model User {
   id         Int     @id @default(autoincrement())
   email      String  @unique
   name       String?
-  password   String  @unique
-  phone      String  @unique @default("")
+  password   String
+  phone      String?
   avatarPath String?
   notes      Note[]
 
@@ -37,12 +34,12 @@ model Note {
 }
 
 model Label {
-  id     Int    @id @default(autoincrement())
-  title  String
-  color  String @default("#fff")
-  Note   Note?  @relation(fields: [noteId], references: [id])
-  noteId Int?   @map("note_id")
-
+  id        Int      @id @default(autoincrement())
+  title     String
+  color     String   @default("#fff")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+
+  Note   Note? @relation(fields: [noteId], references: [id])
+  noteId Int?  @map("note_id")
 }

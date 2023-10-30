@@ -18,7 +18,20 @@ export class AuthService {
 	) {}
 
 	/**
-	 * Регистрация пользователя
+	 * Авторизация
+	 */
+	async login(dto: AuthDto) {
+		const user = await this.validateUser(dto);
+		const tokens = await this.createTokens(user.id);
+
+		return {
+			user: this.returnUserFields(user),
+			...tokens
+		};
+	}
+
+	/**
+	 * Регистрация
 	 */
 	async register(dto: AuthDto) {
 		const isExists = await this.prisma.user.findUnique({
@@ -34,7 +47,6 @@ export class AuthService {
 				password: await hash(dto.password)
 			}
 		});
-
 		const tokens = await this.createTokens(user.id);
 
 		return {
@@ -79,7 +91,6 @@ export class AuthService {
 				id: result.id
 			}
 		});
-
 		const tokens = await this.createTokens(user.id);
 
 		return {
@@ -88,19 +99,6 @@ export class AuthService {
 		};
 	}
 
-	/**
-	 * Авторизация
-	 */
-	async login(dto: AuthDto) {
-		const user = await this.validateUser(dto);
-
-		const tokens = await this.createTokens(user.id);
-
-		return {
-			user: this.returnUserFields(user),
-			...tokens
-		};
-	}
 	/**
 	 * Валидация пользователя
 	 */
@@ -113,7 +111,6 @@ export class AuthService {
 		if (!user) throw new NotFoundException('Пользователь не существует!');
 
 		const isValid = await verify(user.password, dto.password);
-
 		if (!isValid) throw new UnauthorizedException('Неверный пароль!');
 
 		return user;

@@ -10,7 +10,6 @@ export class AuthController {
 	/**
 	 * 	Register, createTokens
 	 */
-
 	@UsePipes(new ValidationPipe())
 	@HttpCode(200)
 	@Post('register')
