@@ -27,5 +27,3 @@ $ yarn run start:prod
 
 - Author - [Korkin Kirill](https://t.me/KorkinK)
 - Website - [https://quetan.github.io](https://quetan.github.io)
-
-
